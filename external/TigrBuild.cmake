@@ -21,5 +21,14 @@ set_target_properties(tigr-static PROPERTIES OUTPUT_NAME tigr)
 
 target_include_directories(tigr-static PUBLIC ${_TIGR_SOURCE_DIR})
 
+# Platform-specific libraries
+if(WIN32)
+    target_link_libraries(tigr-static PUBLIC opengl32 gdi32)
+elseif(APPLE)
+    target_link_libraries(tigr-static PUBLIC "-framework OpenGL" "-framework Cocoa")
+elseif(UNIX)
+    target_link_libraries(tigr-static PUBLIC GLU GL X11)
+endif()
+
 # Add an alias to use a namespace
 add_library(tigr::tigr-static ALIAS tigr-static)
