@@ -8,8 +8,8 @@ constexpr unsigned int kMsPerFrame = 1000 / kFPS;
 
 class Engine {
 public:
-	Engine() = default;
-	~Engine() = default;
+	Engine();
+	~Engine();
 
 	Engine(const Engine& other) = delete;
 	Engine(Engine&& other) = delete;
@@ -23,9 +23,6 @@ public:
 	void Update();
 	void Render();
 	void Quit();
-
-	//static void logme(const std::string& text);
-	static void logme(const char* text);
 
 	[[nodiscard]] bool get_is_running() const { return is_running_; }
 

@@ -1,10 +1,24 @@
 #include "engine.h"
 
+#include "../logger/logger.h"
+
+Engine::Engine()
+{
+	// TODO: make uniques
+
+	Logger::Info("Engine constructor called");
+}
+
+Engine::~Engine()
+{
+	Logger::Info("Engine destructor called");
+}
+
 void Engine::Init()
 {
 	window_ = tigrWindow(320, 240, "Hello", 0);
 	if (window_ == nullptr) {
-		// TODO Logger
+		Logger::Error("Failed to create a TIGR window");
 		return;
 	}
 
