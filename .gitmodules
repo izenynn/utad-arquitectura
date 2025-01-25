@@ -1,0 +1,3 @@
+[submodule "external/tigr"]
+	path = external/tigr
+	url = https://github.com/erkkah/tigr.git

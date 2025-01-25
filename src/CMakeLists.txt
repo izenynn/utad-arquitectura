@@ -1,0 +1,16 @@
+target_sources( main PRIVATE
+        "main.cpp"
+        "game/game.h"
+        "game/game.cpp"
+        "logger/logger.h"
+        "logger/logger.cpp"
+        "ecs/ecs.h"
+        "ecs/ecs.cpp"
+        "systems/movement_system.h"
+        "systems/render_system.h"
+        "components/transform_component.h"
+        "components/rigidbody_component.h"
+        "components/sprite_component.h"
+        "asset_store/asset_store.h"
+        "asset_store/asset_store.cpp"
+)
