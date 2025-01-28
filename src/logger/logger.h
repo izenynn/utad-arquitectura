@@ -3,6 +3,19 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
+
+// Utils
+
+template <typename ... Args>
+std::string sstr(Args&& ... args) {
+	std::ostringstream sstr;
+	sstr << std::dec;
+	((sstr << args), ...);
+	return sstr.str();
+}
+
+// Logger class
 
 enum class LogType {
 	kLogInfo = 0,
