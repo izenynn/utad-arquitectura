@@ -12,3 +12,9 @@
 - Version: 1.15 (ee86beb30e4973f5feffe3ce63bfa4fbadf72f38, 2025)
 - License: MIT
 
+## Lua
+
+- Upstream: [https://github.com/lua/lua]
+- Version: 5.4.6 (6443185167c77adcc8552a3fee7edab7895db1a9, 2023)
+- License: MIT
+
