@@ -3,7 +3,7 @@
 
 #include <tigr.h>
 
-constexpr unsigned int kFPS = 30;
+constexpr unsigned int kFPS = 60;
 constexpr unsigned int kMsPerFrame = 1000 / kFPS;
 
 class Engine {

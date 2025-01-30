@@ -4,4 +4,5 @@ target_sources( main PRIVATE
         "engine/engine.cpp"
         "logger/logger.h"
         "logger/logger.cpp"
+        "ecs/ecs.h"
 )
