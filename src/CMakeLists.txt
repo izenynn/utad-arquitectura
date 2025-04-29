@@ -4,6 +4,8 @@ target_sources( main PRIVATE
         "engine/engine.cpp"
         "logger/logger.h"
         "logger/logger.cpp"
+        "asset_store/asset_store.h"
+        "asset_store/asset_store.cpp"
         "ecs/ecs.h"
         "ecs/ecs.cpp"
         "components/transform_component.h"

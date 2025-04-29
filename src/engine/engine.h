@@ -6,6 +6,7 @@
 #include <tigr.h>
 
 #include "../ecs/ecs.h"
+#include "../asset_store/asset_store.h"
 
 constexpr unsigned int kFPS = 60;
 constexpr unsigned int kMsPerFrame = 1000 / kFPS;
@@ -37,6 +38,7 @@ private:
 	Tigr* window_{nullptr};
 
 	std::unique_ptr<Registry> registry_{nullptr};
+	std::unique_ptr<AssetStore> asset_store_{nullptr};
 };
 
 #endif // ENGINE_H_

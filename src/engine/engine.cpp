@@ -6,10 +6,12 @@
 #include "../components/rigidbody_component.h"
 #include "../components/sprite_component.h"
 #include "../systems/movement_system.h"
+#include "../systems/render_system.h"
 
 Engine::Engine()
 {
 	registry_ = std::make_unique<Registry>();
+	asset_store_ = std::make_unique<AssetStore>();
 
 	Logger::Info("Engine constructor called");
 }
@@ -32,14 +34,18 @@ void Engine::Init()
 
 void Engine::Setup()
 {
+	// Add assets
+	asset_store_->AddImage("player-image", "assets/player.png");
+
+	// Add systems
 	registry_->AddSystem<MovementSystem>();
-	// registry_->AddSystem<RenderSystem>();
+	registry_->AddSystem<RenderSystem>();
 
 	// Add entities
 	Entity p = registry_->CreateEntity();
 	p.AddComponent<TransformComponent>(glm::vec2(50.0f, 50.0f), glm::vec2(1.0f, 1.0f), 0.0f);
 	p.AddComponent<RigidbodyComponent>(glm::vec2(20.0f, 1.0f));
-	p.AddComponent<SpriteComponent>("player-image", 32, 32, 0, nullptr, 0, 0);
+	p.AddComponent<SpriteComponent>("player-image", 0);
 }
 
 void Engine::Run()
@@ -71,13 +77,13 @@ void Engine::ProcessInput()
 
 void Engine::Update(float delta_time)
 {
-	(void)delta_time;
+	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
 
 	registry_->Update();
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
+	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
 
 	// TODO: temporal for debuging
-	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
 	tigrPrint(window_, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), sstr("DT: ", delta_time).c_str());
 }
 
