@@ -1,7 +1,11 @@
 #ifndef ENGINE_H_
 #define ENGINE_H_
 
+#include <memory>
+
 #include <tigr.h>
+
+#include "../ecs/ecs.h"
 
 constexpr unsigned int kFPS = 60;
 constexpr unsigned int kMsPerFrame = 1000 / kFPS;
@@ -31,6 +35,8 @@ private:
 
 	bool is_running_{false};
 	Tigr* window_{nullptr};
+
+	std::unique_ptr<Registry> registry_{nullptr};
 };
 
 #endif // ENGINE_H_

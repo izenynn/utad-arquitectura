@@ -6,4 +6,8 @@ target_sources( main PRIVATE
         "logger/logger.cpp"
         "ecs/ecs.h"
         "ecs/ecs.cpp"
+        "components/transform_component.h"
+        "components/rigidbody_component.h"
+        "components/sprite_component.h"
+        "systems/movement_system.h"
 )

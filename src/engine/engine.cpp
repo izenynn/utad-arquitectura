@@ -1,10 +1,15 @@
 #include "engine.h"
 
 #include "../logger/logger.h"
+#include "../ecs/ecs.h"
+#include "../components/transform_component.h"
+#include "../components/rigidbody_component.h"
+#include "../components/sprite_component.h"
+#include "../systems/movement_system.h"
 
 Engine::Engine()
 {
-	// TODO: make uniques
+	registry_ = std::make_unique<Registry>();
 
 	Logger::Info("Engine constructor called");
 }
@@ -27,7 +32,14 @@ void Engine::Init()
 
 void Engine::Setup()
 {
-	// TODO load game stuff
+	registry_->AddSystem<MovementSystem>();
+	// registry_->AddSystem<RenderSystem>();
+
+	// Add entities
+	Entity p = registry_->CreateEntity();
+	p.AddComponent<TransformComponent>(glm::vec2(50.0f, 50.0f), glm::vec2(1.0f, 1.0f), 0.0f);
+	p.AddComponent<RigidbodyComponent>(glm::vec2(20.0f, 1.0f));
+	p.AddComponent<SpriteComponent>("player-image", 32, 32, 0, nullptr, 0, 0);
 }
 
 void Engine::Run()
@@ -61,9 +73,8 @@ void Engine::Update(float delta_time)
 {
 	(void)delta_time;
 
-	// TODO: Logic
-
-	// TODO: Collisions
+	registry_->Update();
+	registry_->GetSystem<MovementSystem>().Update(delta_time);
 
 	// TODO: temporal for debuging
 	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));

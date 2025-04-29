@@ -64,7 +64,7 @@ private:
 };
 
 /*
- * A system is a class thet processes entities with a specific set of components.
+ * A system is a class that processes entities with a specific set of components.
  */
 class System {
 public:
@@ -97,7 +97,7 @@ protected:
 };
 
 template <typename T, typename Container = std::vector<T>>
-class Pool : IPool {
+class Pool : public IPool {
 public:
 	typedef Container					container_type;
 	typedef typename container_type::value_type		value_type;
@@ -156,7 +156,7 @@ public:
 private:
 	id_type num_entities_{0};
 
-        std::vector<std::shared_ptr<IPool>> component_pools_{};
+	std::vector<std::shared_ptr<IPool>> component_pools_{};
         std::vector<Signature> component_signatures_{};
         std::unordered_map<std::type_index, std::shared_ptr<System>> systems_{};
 
