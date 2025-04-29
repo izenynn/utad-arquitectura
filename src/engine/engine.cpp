@@ -23,7 +23,7 @@ Engine::~Engine()
 
 void Engine::Init()
 {
-	window_ = tigrWindow(320, 240, "Hello", 0);
+	window_ = tigrWindow(kWindowWidth, kWindowHeight, kWindowTitle, 0);
 	if (window_ == nullptr) {
 		Logger::Error("Failed to create a TIGR window");
 		return;
@@ -77,29 +77,25 @@ void Engine::ProcessInput()
 
 void Engine::Update(float delta_time)
 {
-	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
-
 	registry_->Update();
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
 	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
 
-	// TODO: temporal for debuging
 	tigrPrint(window_, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), sstr("DT: ", delta_time).c_str());
 }
 
 void Engine::Render()
 {
-	//tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
-
-	//tigrPrint(window_, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), "Hello, world.");
-
 	tigrUpdate(window_);
+	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
 }
 
 void Engine::Quit()
 {
-	tigrFree(window_);
-	window_ = nullptr;
+	if (window_) {
+		tigrFree(window_);
+		window_ = nullptr;
+	}
 }
 
 float Engine::Wait(float ms) const

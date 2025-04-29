@@ -8,6 +8,10 @@
 #include "../ecs/ecs.h"
 #include "../asset_store/asset_store.h"
 
+constexpr int kWindowWidth = 320;
+constexpr int kWindowHeight = 240;
+constexpr const char* kWindowTitle = "Daniel Poveda";
+
 constexpr unsigned int kFPS = 60;
 constexpr unsigned int kMsPerFrame = 1000 / kFPS;
 
