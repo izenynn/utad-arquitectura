@@ -1,6 +1,6 @@
 #include "engine/engine.h"
 
-/*int main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	(void)argc; (void)argv;
 
@@ -11,11 +11,11 @@
 	engine.Quit();
 
 	return 0;
-}*/
+}
 
 // ECS Demo
 
-#include <cassert>
+/*#include <cassert>
 #include <string>
 #include <iostream>
 #include "ecs/ecs.h"
@@ -125,4 +125,4 @@ int main()
     assert( !has<name>(player) );
 
     assert( (join<name, position>().size() == 1) );
-}
+}*/
