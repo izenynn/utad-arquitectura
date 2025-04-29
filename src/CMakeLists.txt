@@ -8,8 +8,14 @@ target_sources( main PRIVATE
         "asset_store/asset_store.cpp"
         "ecs/ecs.h"
         "ecs/ecs.cpp"
+
         "components/transform_component.h"
         "components/rigidbody_component.h"
         "components/sprite_component.h"
+        "components/input_component.h"
+
         "systems/movement_system.h"
+        "systems/render_system.h"
+        "systems/input_system.h"
+        "systems/player_control_system.h"
 )

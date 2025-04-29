@@ -1,5 +1,8 @@
 #include "engine.h"
 
+#include <windows.h>
+
+#include "../components/input_component.h"
 #include "../logger/logger.h"
 #include "../ecs/ecs.h"
 #include "../components/transform_component.h"
@@ -7,6 +10,8 @@
 #include "../components/sprite_component.h"
 #include "../systems/movement_system.h"
 #include "../systems/render_system.h"
+#include "../systems/input_system.h"
+#include "../systems/player_control_system.h"
 
 Engine::Engine()
 {
@@ -40,11 +45,14 @@ void Engine::Setup()
 	// Add systems
 	registry_->AddSystem<MovementSystem>();
 	registry_->AddSystem<RenderSystem>();
+	registry_->AddSystem<InputSystem>();
+	registry_->AddSystem<PlayerControlSystem>();
 
 	// Add entities
 	Entity p = registry_->CreateEntity();
 	p.AddComponent<TransformComponent>(glm::vec2(50.0f, 50.0f), glm::vec2(1.0f, 1.0f), 0.0f);
-	p.AddComponent<RigidbodyComponent>(glm::vec2(20.0f, 1.0f));
+	p.AddComponent<RigidbodyComponent>();
+	p.AddComponent<InputComponent>();
 	p.AddComponent<SpriteComponent>("player-image", 0);
 }
 
@@ -78,6 +86,8 @@ void Engine::ProcessInput()
 void Engine::Update(float delta_time)
 {
 	registry_->Update();
+	registry_->GetSystem<InputSystem>().Update(window_);
+	registry_->GetSystem<PlayerControlSystem>().Update();
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
 	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
 
