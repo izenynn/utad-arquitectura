@@ -49,7 +49,7 @@ public:
 			int dest_y = static_cast<int>(transform.position.y);
 
 			// Basic blit (no scale/rotation support in Tigr)
-			tigrBlit(window, img, dest_x, dest_y, 0, 0, img->w, img->h);
+			tigrBlitAlpha(window, img, dest_x, dest_y, 0, 0, img->w, img->h, 1.0f);
 		}
 	}
 };
