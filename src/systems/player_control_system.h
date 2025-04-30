@@ -23,10 +23,15 @@ public:
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
 			auto& input = entity.GetComponent<InputComponent>();
 
-			if (input.keys_held.count(TK_LEFT))
+			const bool left = input.keys_held.count(TK_LEFT);
+			const bool right = input.keys_held.count(TK_RIGHT);
+
+			if (left && !right)
 				rigidbody.velocity.x = -5.0f;
-			if (input.keys_held.count(TK_RIGHT))
+			else if (right && !left)
 				rigidbody.velocity.x = 5.0f;
+			else
+				rigidbody.velocity.x = 0.0f;
 		}
 
 	}
