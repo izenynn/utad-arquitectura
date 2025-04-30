@@ -42,7 +42,7 @@ public:
 private:
 	void HandleBouncingBall(Entity entity, float delta_time, Registry& registry, const AssetStore& asset_store, int screen_w)
 	{
-		constexpr float gravity = 150.0f;
+		constexpr float gravity = 75.0f;
 		constexpr float ground = 200.0f;
 
 		auto& transform = entity.GetComponent<TransformComponent>();
@@ -58,8 +58,10 @@ private:
 			rigidbody.velocity.y *= -0.99f;
 
 			// Split logic
+			(void)registry;
+			(void)enemy;
 			if (enemy.tier > 1) {
-				SpawnSplitBalls(entity, transform.position, enemy.tier - 1, registry);
+				SpawnSplitBalls(entity, enemy.tier - 1, registry, asset_store);
 				registry.DestroyEntity(entity);
 			} else {
 				registry.DestroyEntity(entity);
@@ -73,15 +75,22 @@ private:
 		}
 	}
 
-	void SpawnSplitBalls(const Entity& source, glm::vec2 pos, int new_tier, Registry& registry)
+	void SpawnSplitBalls(const Entity& source, int new_tier, Registry& registry, const AssetStore& asset_store)
 	{
-		(void)source;
+		auto& transform = source.GetComponent<TransformComponent>();
+		auto& rigidbody = source.GetComponent<RigidbodyComponent>();
+
 		for (int i = 0; i < 2; ++i) {
 			auto e = registry.CreateEntity();
-			e.AddComponent<TransformComponent>(pos, glm::vec2(1.0f), 0.0f);
-			e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -50.0f : 50.0f, -150.0f));
+			e.AddComponent<TransformComponent>(transform.position);
+			e.AddComponent<TransformComponent>(transform.position);
+			e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -rigidbody.velocity.x : rigidbody.velocity.x, rigidbody.velocity.y));
 			e.AddComponent<SpriteComponent>(std::string("ball") + std::to_string(new_tier), new_tier);
 			e.AddComponent<EnemyComponent>(EnemyType::BouncingBall, new_tier);
+
+			(void)asset_store;
+			//const float hh =  static_cast<float>(asset_store.GetImage(e.GetComponent<SpriteComponent>().asset_id)->h) / 2.0f;
+			//e.AddComponent<TransformComponent>(glm::vec2(transform.position.x, transform.position.y - hh));
 		}
 	}
 
