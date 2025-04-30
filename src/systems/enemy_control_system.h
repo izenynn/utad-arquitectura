@@ -23,17 +23,14 @@ public:
 
 	void Update(float delta_time, Registry& registry, const AssetStore& asset_store, int screen_w, int screen_h)
 	{
+		(void)screen_h;
 		for (const auto& entity : GetSystemEntities()) {
-			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
-			auto& enemy = entity.GetComponent<EnemyComponent>();
-
-			switch (enemy.type) {
+			switch (entity.GetComponent<EnemyComponent>().type) {
 				case EnemyType::BouncingBall:
 					HandleBouncingBall(entity, delta_time, registry, asset_store, screen_w);
 					break;
 				case EnemyType::HexagonBall:
-					HandleHexagonBall(transform, rigidbody, delta_time, static_cast<float>(screen_w), static_cast<float>(screen_h));
+					HandleHexagonBall(entity, delta_time, registry, asset_store, screen_w);
 					break;
 			}
 		}
@@ -52,6 +49,7 @@ private:
 		rigidbody.velocity.y += gravity * delta_time;
 		transform.position += rigidbody.velocity * delta_time;
 
+		// Ground bounce
 		const float hh =  static_cast<float>(asset_store.GetImage(entity.GetComponent<SpriteComponent>().asset_id)->h) / 2.0f;
 		if (transform.position.y > ground - hh - padding) {
 			transform.position.y = ground - hh - padding;
@@ -60,12 +58,10 @@ private:
 			// Split logic
 			(void)registry;
 			(void)enemy;
-			if (enemy.tier > 1) {
-				SpawnSplitBalls(entity, enemy.tier - 1, registry, asset_store);
+			if (enemy.tier > 1)
+				SplitBouncingBall(entity, enemy.tier - 1, registry);
+			else
 				registry.DestroyEntity(entity);
-			} else {
-				registry.DestroyEntity(entity);
-			}
 		}
 
 		// Left/right bounce
@@ -75,7 +71,39 @@ private:
 		}
 	}
 
-	void SpawnSplitBalls(const Entity& source, int new_tier, Registry& registry, const AssetStore& asset_store)
+	void HandleHexagonBall(Entity entity, float delta_time, Registry& registry, const AssetStore& asset_store, int screen_w)
+	{
+		constexpr float top = 8.0f;
+		constexpr float ground = 200.0f;
+
+		auto& transform = entity.GetComponent<TransformComponent>();
+		auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
+		auto& enemy = entity.GetComponent<EnemyComponent>();
+
+		transform.position += rigidbody.velocity * delta_time;
+
+		// Up/down bounce
+		const float hh =  static_cast<float>(asset_store.GetImage(entity.GetComponent<SpriteComponent>().asset_id)->h) / 2.0f;
+		if (transform.position.y <= top + hh + padding || transform.position.y >= ground - hh - padding) {
+			rigidbody.velocity.y *= -1;
+			if (enemy.tier > 1)
+				SplitHexagonBall(entity, enemy.tier - 1, registry, true);
+			else
+				registry.DestroyEntity(entity);
+		}
+
+		// Left/right bounce
+		const float hw =  static_cast<float>(asset_store.GetImage(entity.GetComponent<SpriteComponent>().asset_id)->w) / 2.0f;
+		if (transform.position.x <= 0.0f + hw + padding || transform.position.x >= static_cast<float>(screen_w) - hw - padding) {
+			rigidbody.velocity.x *= -1;
+			if (enemy.tier > 1)
+				SplitHexagonBall(entity, enemy.tier - 1, registry, false);
+			else
+				registry.DestroyEntity(entity);
+		}
+	}
+
+	void SplitBouncingBall(const Entity& source, int new_tier, Registry& registry)
 	{
 		auto& transform = source.GetComponent<TransformComponent>();
 		auto& rigidbody = source.GetComponent<RigidbodyComponent>();
@@ -83,26 +111,31 @@ private:
 		for (int i = 0; i < 2; ++i) {
 			auto e = registry.CreateEntity();
 			e.AddComponent<TransformComponent>(transform.position);
-			e.AddComponent<TransformComponent>(transform.position);
 			e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -rigidbody.velocity.x : rigidbody.velocity.x, rigidbody.velocity.y));
 			e.AddComponent<SpriteComponent>(std::string("ball") + std::to_string(new_tier), new_tier);
 			e.AddComponent<EnemyComponent>(EnemyType::BouncingBall, new_tier);
-
-			(void)asset_store;
-			//const float hh =  static_cast<float>(asset_store.GetImage(e.GetComponent<SpriteComponent>().asset_id)->h) / 2.0f;
-			//e.AddComponent<TransformComponent>(glm::vec2(transform.position.x, transform.position.y - hh));
 		}
+
+		registry.DestroyEntity(source);
 	}
 
-	void HandleHexagonBall(TransformComponent& transform, RigidbodyComponent& rigidbody, float dt, float screen_w, float screen_h)
+	void SplitHexagonBall(const Entity& source, int new_tier, Registry& registry, bool is_vertical_collision)
 	{
-		transform.position += rigidbody.velocity * dt;
+		auto& transform = source.GetComponent<TransformComponent>();
+		auto& rigidbody = source.GetComponent<RigidbodyComponent>();
 
-		if (transform.position.x <= 0 || transform.position.x >= screen_w)
-			rigidbody.velocity.x *= -1;
+		for (int i = 0; i < 2; ++i) {
+			auto e = registry.CreateEntity();
+			e.AddComponent<TransformComponent>(transform.position);
+			if (is_vertical_collision)
+				e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -rigidbody.velocity.x : rigidbody.velocity.x, rigidbody.velocity.y));
+			else
+				e.AddComponent<RigidbodyComponent>(glm::vec2(rigidbody.velocity.x, i == 0 ? -rigidbody.velocity.y : rigidbody.velocity.y));
+			e.AddComponent<SpriteComponent>(std::string("hex") + std::to_string(new_tier), new_tier);
+			e.AddComponent<EnemyComponent>(EnemyType::HexagonBall, new_tier);
+		}
 
-		if (transform.position.y <= 0 || transform.position.y >= screen_h)
-			rigidbody.velocity.y *= -1;
+		registry.DestroyEntity(source);
 	}
 };
 

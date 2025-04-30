@@ -76,9 +76,13 @@ void Engine::Setup()
 
 	Entity enemy = registry_->CreateEntity();
 	enemy.AddComponent<TransformComponent>(glm::vec2(100.0f, 50.0f));
-	enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 0.0f));
-	enemy.AddComponent<SpriteComponent>("ball4", 20);
-	enemy.AddComponent<EnemyComponent>(EnemyType::BouncingBall, 4);
+	// enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 0.0f));
+	// enemy.AddComponent<SpriteComponent>("ball4", 20);
+	// enemy.AddComponent<EnemyComponent>(EnemyType::BouncingBall, 4);
+
+	enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 25.0f));
+	enemy.AddComponent<SpriteComponent>("hex3", 20);
+	enemy.AddComponent<EnemyComponent>(EnemyType::HexagonBall, 3);
 }
 
 void Engine::Run()
