@@ -19,6 +19,8 @@ public:
 
 	void Update()
 	{
+		constexpr float speed = 128.0f;
+
 		for (const auto& entity : GetSystemEntities()) {
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
 			auto& input = entity.GetComponent<InputComponent>();
@@ -27,9 +29,9 @@ public:
 			const bool right = input.keys_held.count(TK_RIGHT);
 
 			if (left && !right)
-				rigidbody.velocity.x = -5.0f;
+				rigidbody.velocity.x = -speed;
 			else if (right && !left)
-				rigidbody.velocity.x = 5.0f;
+				rigidbody.velocity.x = speed;
 			else
 				rigidbody.velocity.x = 0.0f;
 		}

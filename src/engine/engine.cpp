@@ -40,7 +40,8 @@ void Engine::Init()
 void Engine::Setup()
 {
 	// Add assets
-	asset_store_->AddImage("player-image", "assets/player.png");
+	asset_store_->AddImage("player", "assets/player.png");
+	asset_store_->AddImage("background", "assets/background.png");
 
 	// Add systems
 	registry_->AddSystem<MovementSystem>();
@@ -50,10 +51,15 @@ void Engine::Setup()
 
 	// Add entities
 	Entity p = registry_->CreateEntity();
-	p.AddComponent<TransformComponent>(glm::vec2(50.0f, 50.0f), glm::vec2(1.0f, 1.0f), 0.0f);
+	p.AddComponent<TransformComponent>(glm::vec2(128.0f, 176.0f));
 	p.AddComponent<RigidbodyComponent>();
 	p.AddComponent<InputComponent>();
-	p.AddComponent<SpriteComponent>("player-image", 0);
+	p.AddComponent<SpriteComponent>("player", 50);
+
+	Entity bg = registry_->CreateEntity();
+	bg.AddComponent<TransformComponent>(glm::vec2(0.0f, 8.0f));
+	bg.GetComponent<TransformComponent>().pivot = glm::vec2(0.0f, 0.0f);
+	bg.AddComponent<SpriteComponent>("background", 0);
 }
 
 void Engine::Run()
@@ -97,7 +103,7 @@ void Engine::Update(float delta_time)
 void Engine::Render()
 {
 	tigrUpdate(window_);
-	tigrClear(window_, tigrRGB(0x80, 0x90, 0xa0));
+	tigrClear(window_, tigrRGB(0x0c, 0x0c, 0x0c));
 }
 
 void Engine::Quit()
