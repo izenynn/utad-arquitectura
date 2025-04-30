@@ -13,9 +13,14 @@ target_sources( main PRIVATE
         "components/rigidbody_component.h"
         "components/sprite_component.h"
         "components/input_component.h"
+        "components/enemy_component.h"
 
         "systems/movement_system.h"
         "systems/render_system.h"
         "systems/input_system.h"
         "systems/player_control_system.h"
+        "systems/enemy_control_system.h"
+        "systems/enemy_spawn_system.h"
+
+        "game/game_manager.h"
 )

@@ -4,6 +4,7 @@
 #include <tigr.h>
 
 #include "../ecs/ecs.h"
+#include "../asset_store/asset_store.h"
 #include "../components/transform_component.h"
 #include "../components/rigidbody_component.h"
 #include "../components/input_component.h"
