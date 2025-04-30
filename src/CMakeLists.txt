@@ -21,6 +21,4 @@ target_sources( main PRIVATE
         "systems/player_control_system.h"
         "systems/enemy_control_system.h"
         "systems/enemy_spawn_system.h"
-
-        "game/game_manager.h"
 )
