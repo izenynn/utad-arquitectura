@@ -75,10 +75,10 @@ void Engine::Setup()
 	bg.AddComponent<SpriteComponent>("background", 0);
 
 	Entity enemy = registry_->CreateEntity();
-	enemy.AddComponent<TransformComponent>(glm::vec2(100.0f, 100.0f));
+	enemy.AddComponent<TransformComponent>(glm::vec2(100.0f, 50.0f));
 	enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 0.0f));
-	enemy.AddComponent<SpriteComponent>("ball1", 20);
-	enemy.AddComponent<EnemyComponent>();
+	enemy.AddComponent<SpriteComponent>("ball4", 20);
+	enemy.AddComponent<EnemyComponent>(EnemyType::BouncingBall, 4);
 }
 
 void Engine::Run()
@@ -111,6 +111,7 @@ void Engine::ProcessInput()
 void Engine::Update(float delta_time)
 {
 	registry_->Update();
+
 	registry_->GetSystem<InputSystem>().Update(window_);
 	registry_->GetSystem<PlayerControlSystem>().Update(delta_time);
 	registry_->GetSystem<EnemyControlSystem>().Update(delta_time, *registry_, *asset_store_, kWindowWidth, kWindowHeight);

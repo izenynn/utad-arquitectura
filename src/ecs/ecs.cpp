@@ -44,13 +44,22 @@ Entity Registry::CreateEntity()
         return entity;
 }
 
+void Registry::DestroyEntity(const Entity& entity)
+{
+	entities_to_remove_.insert(entity);
+}
+
 void Registry::Update()
 {
 	for (auto entity : entities_to_add_)
 		AddEntityToSystems(entity);
         entities_to_add_.clear();
-        // TODO: update...
-        // TODO: remove the entities that are marked for removal
+
+	for (auto entity : entities_to_remove_) {
+		RemoveEntityFromSystems(entity);
+		entity.registry = nullptr;
+	}
+	entities_to_remove_.clear();
 }
 
 void Registry::AddEntityToSystems(const Entity& entity)
@@ -63,4 +72,16 @@ void Registry::AddEntityToSystems(const Entity& entity)
                 if ((cmp_signature & system_signature) == system_signature)
 			system.second->AddEntityToSystem(entity);
         }
+}
+
+void Registry::RemoveEntityFromSystems(const Entity& entity)
+{
+	const auto ent_id = entity.id();
+	const auto& cmp_signature = component_signatures_[ent_id];
+
+	for (auto& system : systems_) {
+		const auto& system_signature = system.second->GetComponentSignature();
+		if ((cmp_signature & system_signature) == system_signature)
+			system.second->RemoveEntityFromSystem(entity);
+	}
 }

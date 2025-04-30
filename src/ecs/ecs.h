@@ -134,10 +134,11 @@ public:
 
         void Update();
         void AddEntityToSystems(const Entity& entity);
+	void RemoveEntityFromSystems(const Entity& entity);
 
         // Entity management
         Entity CreateEntity();
-        // void DestroyEntity(Entity entity);
+        void DestroyEntity(const Entity& entity);
 
         // Component management
         template <typename TComponent, typename... TArgs>

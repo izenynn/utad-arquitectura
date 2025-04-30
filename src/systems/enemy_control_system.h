@@ -42,7 +42,7 @@ public:
 private:
 	void HandleBouncingBall(Entity entity, float delta_time, Registry& registry, const AssetStore& asset_store, int screen_w)
 	{
-		constexpr float gravity = 300.0f;
+		constexpr float gravity = 150.0f;
 		constexpr float ground = 200.0f;
 
 		auto& transform = entity.GetComponent<TransformComponent>();
@@ -57,14 +57,13 @@ private:
 			transform.position.y = ground - hh - padding;
 			rigidbody.velocity.y *= -0.99f;
 
-			(void)registry;
-			(void)enemy;
-			(void)entity;
 			// Split logic
-			/*if (enemy.tier > 0) {
+			if (enemy.tier > 1) {
 				SpawnSplitBalls(entity, transform.position, enemy.tier - 1, registry);
-				// registry_->remove_entity(entity);
-			}*/
+				registry.DestroyEntity(entity);
+			} else {
+				registry.DestroyEntity(entity);
+			}
 		}
 
 		// Left/right bounce
@@ -81,8 +80,8 @@ private:
 			auto e = registry.CreateEntity();
 			e.AddComponent<TransformComponent>(pos, glm::vec2(1.0f), 0.0f);
 			e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -50.0f : 50.0f, -150.0f));
+			e.AddComponent<SpriteComponent>(std::string("ball") + std::to_string(new_tier), new_tier);
 			e.AddComponent<EnemyComponent>(EnemyType::BouncingBall, new_tier);
-			e.AddComponent<SpriteComponent>("ball-image", new_tier);
 		}
 	}
 

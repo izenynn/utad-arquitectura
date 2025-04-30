@@ -7,8 +7,13 @@ enum class EnemyType {
 };
 
 struct EnemyComponent {
-	EnemyType type{EnemyType::BouncingBall};
-	int tier{1}; // Used to determine size/split logic
+	EnemyType type;
+	int tier;
+
+	EnemyComponent(
+		EnemyType type = EnemyType::BouncingBall,
+		int tier = 1)
+		: type(type), tier(tier) {}
 };
 
 #endif // ENEMY_COMPONENT_H_
