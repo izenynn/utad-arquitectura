@@ -73,16 +73,6 @@ void Engine::Setup()
 	bg.GetComponent<TransformComponent>().position = glm::vec2(0.0f, 8.0f);
 	bg.GetComponent<TransformComponent>().pivot = glm::vec2(0.0f, 0.0f);
 	bg.AddComponent<SpriteComponent>("background", 0);
-
-	Entity enemy = registry_->CreateEntity();
-	enemy.AddComponent<TransformComponent>(glm::vec2(100.0f, 50.0f));
-	// enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 0.0f));
-	// enemy.AddComponent<SpriteComponent>("ball4", 20);
-	// enemy.AddComponent<EnemyComponent>(EnemyType::BouncingBall, 4);
-
-	enemy.AddComponent<RigidbodyComponent>(glm::vec2(25.0f, 25.0f));
-	enemy.AddComponent<SpriteComponent>("hex3", 20);
-	enemy.AddComponent<EnemyComponent>(EnemyType::HexagonBall, 3);
 }
 
 void Engine::Run()
@@ -119,6 +109,7 @@ void Engine::Update(float delta_time)
 	registry_->GetSystem<InputSystem>().Update(window_);
 	registry_->GetSystem<PlayerControlSystem>().Update(delta_time);
 	registry_->GetSystem<EnemyControlSystem>().Update(delta_time, *registry_, *asset_store_, kWindowWidth, kWindowHeight);
+	registry_->GetSystem<EnemySpawnSystem>().Update(delta_time, *registry_);
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
 	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
 
