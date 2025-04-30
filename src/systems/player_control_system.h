@@ -27,9 +27,9 @@ public:
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
 			auto& input = entity.GetComponent<InputComponent>();
 
+			// Set the player's velocity based on input
 			const bool left = input.keys_held.count(TK_LEFT);
 			const bool right = input.keys_held.count(TK_RIGHT);
-
 			if (left && !right)
 				rigidbody.velocity.x = -speed;
 			else if (right && !left)
@@ -37,6 +37,7 @@ public:
 			else
 				rigidbody.velocity.x = 0.0f;
 
+			// Clamp the player's position to the screen bounds
 			if (transform.position.x + rigidbody.velocity.x * delta_time < 20.0f) {
 				transform.position.x = 20.0f;
 				rigidbody.velocity.x = 0.0f;
