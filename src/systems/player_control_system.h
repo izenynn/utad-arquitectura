@@ -14,14 +14,16 @@ public:
 	{
 		RequireComponent<TransformComponent>();
 		RequireComponent<RigidbodyComponent>();
+		RequireComponent<SpriteComponent>();
 		RequireComponent<InputComponent>();
 	}
 
-	void Update()
+	void Update(float delta_time)
 	{
 		constexpr float speed = 128.0f;
 
 		for (const auto& entity : GetSystemEntities()) {
+			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rigidbody = entity.GetComponent<RigidbodyComponent>();
 			auto& input = entity.GetComponent<InputComponent>();
 
@@ -34,8 +36,15 @@ public:
 				rigidbody.velocity.x = speed;
 			else
 				rigidbody.velocity.x = 0.0f;
-		}
 
+			if (transform.position.x + rigidbody.velocity.x * delta_time < 20.0f) {
+				transform.position.x = 20.0f;
+				rigidbody.velocity.x = 0.0f;
+			} else if (transform.position.x + rigidbody.velocity.x * delta_time > 236.0f) {
+				transform.position.x = 236.0f;
+				rigidbody.velocity.x = 0.0f;
+			}
+		}
 	}
 };
 

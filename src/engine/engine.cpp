@@ -93,7 +93,7 @@ void Engine::Update(float delta_time)
 {
 	registry_->Update();
 	registry_->GetSystem<InputSystem>().Update(window_);
-	registry_->GetSystem<PlayerControlSystem>().Update();
+	registry_->GetSystem<PlayerControlSystem>().Update(delta_time);
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
 	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
 
