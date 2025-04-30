@@ -45,8 +45,8 @@ public:
 			Tigr* img = asset_store->GetImage(sprite.asset_id);
 			if (!img) continue;
 
-			int dest_x = static_cast<int>(transform.position.x - static_cast<float>(img->w) * transform.pivot.x);
-			int dest_y = static_cast<int>(transform.position.y - static_cast<float>(img->h) * transform.pivot.y);
+			int dest_x = std::max(0, static_cast<int>(transform.position.x - static_cast<float>(img->w) * transform.pivot.x));
+			int dest_y = std::max(0, static_cast<int>(transform.position.y - static_cast<float>(img->h) * transform.pivot.y));
 
 			// Basic blit (no scale/rotation support in Tigr)
 			tigrBlitAlpha(window, img, dest_x, dest_y, 0, 0, img->w, img->h, 1.0f);
