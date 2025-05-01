@@ -2,8 +2,9 @@
 
 ## Info
 
-2D Game Engine made with C++ for the "Architecture" subject of the master's
-degree in video game programming at [U-Tad](https://u-tad.com/en/).
+2D "Super Pang"-Inspired game created with my own 2D Game Engine made with C++
+for the "Architecture" subject of the master's degree in video game programming
+at [U-Tad](https://u-tad.com/en/).
 
 - [Info](#info)
 - [Build](#build)
