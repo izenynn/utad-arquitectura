@@ -30,8 +30,8 @@ public:
 			time_since_last_spawn_ = 0.0f;
 		}
 
-		// Increase difficulty every 20 seconds
-		if (difficulty_timer_ >= 20.0f && spawn_interval_ > 0.6f) {
+		// Increase difficulty every 5 seconds
+		if (difficulty_timer_ >= 5.0f && spawn_interval_ > 0.6f) {
 			spawn_interval_ -= 0.2f;
 			difficulty_timer_ = 0.0f;
 		}
