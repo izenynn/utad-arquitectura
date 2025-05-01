@@ -13,6 +13,7 @@
 #include "../components/input_component.h"
 #include "../components/enemy_component.h"
 #include "../components/score_component.h"
+#include "../components/game_state_component.h"
 
 #include "../systems/movement_system.h"
 #include "../systems/render_sprite_system.h"
@@ -22,7 +23,10 @@
 #include "../systems/player_death_system.h"
 #include "../systems/enemy_control_system.h"
 #include "../systems/enemy_spawn_system.h"
-#include "../systems/score_system.h"
+#include "../systems/game_score_system.h"
+#include "../systems/game_state_system.h"
+#include "../systems/game_start_system.h"
+#include "../systems/game_reset_system.h"
 
 Engine::Engine()
 {
@@ -70,30 +74,22 @@ void Engine::Setup()
 	registry_->AddSystem<PlayerDeathSystem>();
 	registry_->AddSystem<EnemyControlSystem>();
 	registry_->AddSystem<EnemySpawnSystem>();
-	registry_->AddSystem<ScoreSystem>();
+	registry_->AddSystem<GameScoreSystem>();
+	registry_->AddSystem<GameStateSystem>();
+	registry_->AddSystem<GameStartSystem>();
+	registry_->AddSystem<GameResetSystem>();
 
 	// Add entities
-	Entity p = registry_->CreateEntity();
-	p.AddComponent<TransformComponent>(glm::vec2(128.0f, 176.0f));
-	p.AddComponent<TagComponent>("player");
-	p.AddComponent<RigidbodyComponent>();
-	p.AddComponent<InputComponent>();
-	p.AddComponent<SpriteComponent>("player", 10);
+	Entity gm = registry_->CreateEntity();
+	gm.AddComponent<TagComponent>("game_manager");
+	gm.AddComponent<InputComponent>();
+	gm.AddComponent<GameStateComponent>();
 
 	Entity bg = registry_->CreateEntity();
 	bg.AddComponent<TransformComponent>();
 	bg.GetComponent<TransformComponent>().position = glm::vec2(0.0f, 8.0f);
 	bg.GetComponent<TransformComponent>().pivot = glm::vec2(0.0f, 0.0f);
 	bg.AddComponent<SpriteComponent>("background", 0);
-
-	Entity time_text = registry_->CreateEntity();
-	time_text.AddComponent<TransformComponent>(glm::vec2(100.0f, 208.0f));
-	time_text.AddComponent<TextComponent>("TIME", glm::vec4(0.9f, 0.9f, 0.0f, 1.0f));
-
-	Entity time_score = registry_->CreateEntity();
-	time_score.AddComponent<TransformComponent>(glm::vec2(135.0f, 208.0f));
-	time_score.AddComponent<TextComponent>("000", glm::vec4(0.9f, 0.5f, 0.1f, 1.0f));
-	time_score.AddComponent<ScoreComponent>(0.0f);
 }
 
 void Engine::Run()
@@ -129,14 +125,12 @@ void Engine::Update(float delta_time)
 
 	registry_->GetSystem<InputSystem>().Update(window_);
 	registry_->GetSystem<PlayerControlSystem>().Update(delta_time);
-	registry_->GetSystem<PlayerDeathSystem>().Update(*asset_store_, [this]() {
-		Logger::Error("Player has died");
-		// is_running_ = false;
-	});
+	registry_->GetSystem<PlayerDeathSystem>().Update(*registry_, *asset_store_);
 	registry_->GetSystem<EnemyControlSystem>().Update(delta_time, *registry_, *asset_store_, kWindowWidth, kWindowHeight);
 	registry_->GetSystem<EnemySpawnSystem>().Update(delta_time, *registry_);
 
-	registry_->GetSystem<ScoreSystem>().Update(delta_time);
+	registry_->GetSystem<GameScoreSystem>().Update(delta_time);
+	registry_->GetSystem<GameStateSystem>().Update(*registry_);
 
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
 

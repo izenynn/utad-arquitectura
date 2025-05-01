@@ -26,5 +26,8 @@ target_sources( main PRIVATE
         "systems/player_death_system.h"
         "systems/enemy_control_system.h"
         "systems/enemy_spawn_system.h"
-        "systems/score_system.h"
+        "systems/game_score_system.h"
+        "systems/game_state_system.h"
+        "systems/game_start_system.h"
+        "systems/game_reset_system.h"
 )

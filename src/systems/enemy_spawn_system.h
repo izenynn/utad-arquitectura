@@ -14,13 +14,14 @@ public:
 	EnemySpawnSystem()
 		: rng_(std::random_device{}()), dist_pos_x_(25.0f, 226.0f), dist_pos_y_(25.0f, 125.0f), dist_type_(0, 5), dist_dir_(-50.0f, 50.0f)
 	{
-		spawn_interval_ = 5.0f; // Initial spawn rate in seconds
-		time_since_last_spawn_ = spawn_interval_ - 1.0f; // Start spawning immediately
-		difficulty_timer_ = 0.0f;
+		Reset();
 	}
 
 	void Update(float delta_time, Registry& registry)
 	{
+		if (!active_)
+			return;
+
 		time_since_last_spawn_ += delta_time;
 		difficulty_timer_ += delta_time;
 
@@ -36,10 +37,24 @@ public:
 		}
 	}
 
+	void Reset()
+	{
+		time_since_last_spawn_ = spawn_interval_ - 1.0f; // Start spawning immediately
+		difficulty_timer_ = 0.0f;
+		spawn_interval_ = 5.0f; // Reset to initial spawn rate
+		active_ = true;
+	}
+
+	void Stop()
+	{
+		active_ = false;
+	}
+
 private:
 	float time_since_last_spawn_;
 	float spawn_interval_;
 	float difficulty_timer_;
+	bool active_{false};
 
 	std::mt19937 rng_;
 	std::uniform_real_distribution<float> dist_pos_x_;

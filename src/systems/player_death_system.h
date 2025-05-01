@@ -11,6 +11,8 @@
 #include "../components/transform_component.h"
 #include "../components/tag_component.h"
 #include "../components/sprite_component.h"
+#include "../systems/game_reset_system.h"
+#include "../systems/enemy_spawn_system.h"
 
 /*
  * PlayerDeathSystem checks for collisions between the player and enemies (balls/hexballs).
@@ -26,7 +28,7 @@ public:
 		RequireComponent<SpriteComponent>();
 	}
 
-	void Update(const AssetStore& asset_store, std::function<void()> on_player_death)
+	void Update(Registry& registry, const AssetStore& asset_store)
 	{
 		const Entity* player = nullptr;
 		glm::vec2 player_pos{};
@@ -52,8 +54,9 @@ public:
 				break;
 			}
 		}
+
+		// Could be in the menu :)
 		if (!player) {
-			Logger::Error("Player Death System: Player entity not found");
 			return;
 		}
 
@@ -85,7 +88,16 @@ public:
 
 			const float dist_sq = glm::dot(circle_center - closest_point, circle_center - closest_point);
 			if (dist_sq <= radius * radius) {
-				on_player_death();
+				if (registry.HasSystem<GameResetSystem>())
+					registry.GetSystem<GameResetSystem>().Run(registry);
+				else
+					Logger::Error("Player Death System: Game Reset System not found");
+
+				if (registry.HasSystem<EnemySpawnSystem>())
+					registry.GetSystem<EnemySpawnSystem>().Stop();
+				else
+					Logger::Error("Player Death System: Enemy Spawn System not found");
+
 				return;
 			}
 		}

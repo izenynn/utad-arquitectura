@@ -1,5 +1,5 @@
-#ifndef SCORE_SYSTEM_H_
-#define SCORE_SYSTEM_H_
+#ifndef GAME_SCORE_SYSTEM_H_
+#define GAME_SCORE_SYSTEM_H_
 
 #include <iomanip>
 #include <sstream>
@@ -8,9 +8,9 @@
 #include "../components/text_component.h"
 #include "../components/score_component.h"
 
-class ScoreSystem : public System {
+class GameScoreSystem : public System {
 public:
-	ScoreSystem()
+	GameScoreSystem()
 	{
 		RequireComponent<TextComponent>();
 		RequireComponent<ScoreComponent>();
@@ -34,5 +34,5 @@ public:
 	}
 };
 
-#endif // SCORE_SYSTEM_H_
+#endif // GAME_SCORE_SYSTEM_H_
 
