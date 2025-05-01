@@ -14,6 +14,7 @@ target_sources( main PRIVATE
         "components/sprite_component.h"
         "components/input_component.h"
         "components/text_component.h"
+        "components/tag_component.h"
         "components/enemy_component.h"
         "components/score_component.h"
 

@@ -6,6 +6,7 @@
 #include "../ecs/ecs.h"
 
 #include "../components/transform_component.h"
+#include "../components/tag_component.h"
 #include "../components/rigidbody_component.h"
 #include "../components/sprite_component.h"
 #include "../components/text_component.h"
@@ -72,6 +73,7 @@ void Engine::Setup()
 	// Add entities
 	Entity p = registry_->CreateEntity();
 	p.AddComponent<TransformComponent>(glm::vec2(128.0f, 176.0f));
+	p.AddComponent<TagComponent>("player");
 	p.AddComponent<RigidbodyComponent>();
 	p.AddComponent<InputComponent>();
 	p.AddComponent<SpriteComponent>("player", 10);

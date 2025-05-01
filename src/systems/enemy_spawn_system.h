@@ -4,6 +4,7 @@
 #include <random>
 #include "../ecs/ecs.h"
 #include "../components/transform_component.h"
+#include "../components/tag_component.h"
 #include "../components/rigidbody_component.h"
 #include "../components/enemy_component.h"
 #include "../components/sprite_component.h"
@@ -75,6 +76,7 @@ private:
 
 		auto e = registry.CreateEntity();
 		e.AddComponent<TransformComponent>(position);
+		e.AddComponent<TagComponent>("enemy");
 		e.AddComponent<RigidbodyComponent>(velocity);
 		e.AddComponent<EnemyComponent>(type, tier);
 
