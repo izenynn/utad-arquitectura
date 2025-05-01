@@ -15,6 +15,7 @@ target_sources( main PRIVATE
         "components/input_component.h"
         "components/text_component.h"
         "components/enemy_component.h"
+        "components/score_component.h"
 
         "systems/movement_system.h"
         "systems/render_sprite_system.h"
@@ -23,4 +24,5 @@ target_sources( main PRIVATE
         "systems/player_control_system.h"
         "systems/enemy_control_system.h"
         "systems/enemy_spawn_system.h"
+        "systems/score_system.h"
 )
