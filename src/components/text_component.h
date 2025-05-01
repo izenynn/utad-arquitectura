@@ -5,13 +5,13 @@
 #include <functional>
 #include <utility>
 
-#include <tigr.h>
+#include <glm/glm.hpp>
 
 struct TextComponent {
 	std::string text;
-        TPixel color;
+        glm::vec4 color;
 
-	TextComponent(std::string text = "", TPixel color = tigrRGBA(0xff, 0xff, 0xff, 0xff))
+	TextComponent(std::string text = "", glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 		: text(std::move(text)), color(color) {}
 };
 

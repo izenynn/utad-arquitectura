@@ -19,15 +19,22 @@ public:
 	{
 		for (auto& entity : GetSystemEntities()) {
 			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& ui = entity.GetComponent<TextComponent>();
+			auto& text = entity.GetComponent<TextComponent>();
+
+			// Get TPixel color from glm::vec4
+			TPixel color = tigrRGBA(
+				static_cast<unsigned char>(text.color.x * 255),
+				static_cast<unsigned char>(text.color.y * 255),
+				static_cast<unsigned char>(text.color.z * 255),
+				static_cast<unsigned char>(text.color.w * 255));
 
 			tigrPrint(
 				window,
 				tfont,
 				static_cast<int>(transform.position.x),
 				static_cast<int>(transform.position.y),
-				ui.color,
-				ui.text.c_str());
+				color,
+				text.text.c_str());
 		}
 	}
 };

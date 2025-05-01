@@ -79,7 +79,7 @@ void Engine::Setup()
 
 	Entity score = registry_->CreateEntity();
 	score.AddComponent<TransformComponent>(glm::vec2(50.0f, 50.0f));
-	score.AddComponent<TextComponent>("Score: 4242", tigrRGBA(0xff, 0xff, 0xff, 0xff));
+	score.AddComponent<TextComponent>("Score: 4242", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 void Engine::Run()
