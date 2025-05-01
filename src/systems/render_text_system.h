@@ -7,9 +7,9 @@
 #include "../components/transform_component.h"
 #include "../components/text_component.h"
 
-class TextSystem : public System {
+class RenderTextSystem : public System {
 public:
-	TextSystem()
+	RenderTextSystem()
 	{
 		RequireComponent<TransformComponent>();
 		RequireComponent<TextComponent>();

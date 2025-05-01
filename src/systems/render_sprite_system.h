@@ -7,9 +7,9 @@
 #include "../components/sprite_component.h"
 #include "../asset_store/asset_store.h"
 
-class RenderSystem : public System {
+class RenderSpriteSystem : public System {
 public:
-	RenderSystem()
+	RenderSpriteSystem()
 	{
 		RequireComponent<TransformComponent>();
 		RequireComponent<SpriteComponent>();

@@ -11,8 +11,8 @@
 #include "../components/enemy_component.h"
 #include "../components/text_component.h"
 #include "../systems/movement_system.h"
-#include "../systems/render_system.h"
-#include "../systems/text_system.h"
+#include "../systems/render_sprite_system.h"
+#include "../systems/render_text_system.h"
 #include "../systems/input_system.h"
 #include "../systems/player_control_system.h"
 #include "../systems/enemy_control_system.h"
@@ -57,8 +57,8 @@ void Engine::Setup()
 
 	// Add systems
 	registry_->AddSystem<MovementSystem>();
-	registry_->AddSystem<RenderSystem>();
-	registry_->AddSystem<TextSystem>();
+	registry_->AddSystem<RenderSpriteSystem>();
+	registry_->AddSystem<RenderTextSystem>();
 	registry_->AddSystem<InputSystem>();
 	registry_->AddSystem<PlayerControlSystem>();
 	registry_->AddSystem<EnemyControlSystem>();
@@ -118,8 +118,8 @@ void Engine::Update(float delta_time)
 	registry_->GetSystem<EnemyControlSystem>().Update(delta_time, *registry_, *asset_store_, kWindowWidth, kWindowHeight);
 	registry_->GetSystem<EnemySpawnSystem>().Update(delta_time, *registry_);
 	registry_->GetSystem<MovementSystem>().Update(delta_time);
-	registry_->GetSystem<RenderSystem>().Update(window_, asset_store_);
-	registry_->GetSystem<TextSystem>().Update(window_);
+	registry_->GetSystem<RenderSpriteSystem>().Update(window_, asset_store_);
+	registry_->GetSystem<RenderTextSystem>().Update(window_);
 }
 
 void Engine::Render()
