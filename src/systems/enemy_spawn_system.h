@@ -9,12 +9,16 @@
 #include "../components/enemy_component.h"
 #include "../components/sprite_component.h"
 
+constexpr float kSpawnInterval = 5.0f; // Initial spawn interval in seconds
+
 class EnemySpawnSystem : public System {
 public:
 	EnemySpawnSystem()
 		: rng_(std::random_device{}()), dist_pos_x_(25.0f, 226.0f), dist_pos_y_(25.0f, 125.0f), dist_type_(0, 5), dist_dir_(-50.0f, 50.0f)
 	{
-		Reset();
+		time_since_last_spawn_ = kSpawnInterval - 1.0f; // Start spawning immediately
+		difficulty_timer_ = 0.0f;
+		spawn_interval_ = kSpawnInterval; // Reset to initial spawn rate
 	}
 
 	void Update(float delta_time, Registry& registry)
@@ -39,9 +43,9 @@ public:
 
 	void Reset()
 	{
-		time_since_last_spawn_ = spawn_interval_ - 1.0f; // Start spawning immediately
+		time_since_last_spawn_ = kSpawnInterval - 1.0f; // Start spawning immediately
 		difficulty_timer_ = 0.0f;
-		spawn_interval_ = 5.0f; // Reset to initial spawn rate
+		spawn_interval_ = kSpawnInterval; // Reset to initial spawn rate
 		active_ = true;
 	}
 
@@ -54,7 +58,7 @@ private:
 	float time_since_last_spawn_;
 	float spawn_interval_;
 	float difficulty_timer_;
-	bool active_{false};
+	bool active_;
 
 	std::mt19937 rng_;
 	std::uniform_real_distribution<float> dist_pos_x_;
