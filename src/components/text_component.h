@@ -16,4 +16,3 @@ struct TextComponent {
 };
 
 #endif // TEXT_COMPONENT_H_
-
