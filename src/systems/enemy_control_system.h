@@ -114,6 +114,7 @@ private:
 			e.AddComponent<RigidbodyComponent>(glm::vec2(i == 0 ? -rigidbody.velocity.x : rigidbody.velocity.x, rigidbody.velocity.y));
 			e.AddComponent<SpriteComponent>(std::string("ball") + std::to_string(new_tier), new_tier);
 			e.AddComponent<EnemyComponent>(EnemyType::BouncingBall, new_tier);
+			e.AddComponent<TagComponent>("enemy");
 		}
 
 		registry.DestroyEntity(source);
@@ -133,6 +134,7 @@ private:
 				e.AddComponent<RigidbodyComponent>(glm::vec2(rigidbody.velocity.x, i == 0 ? -rigidbody.velocity.y : rigidbody.velocity.y));
 			e.AddComponent<SpriteComponent>(std::string("hex") + std::to_string(new_tier), new_tier);
 			e.AddComponent<EnemyComponent>(EnemyType::HexagonBall, new_tier);
+			e.AddComponent<TagComponent>("enemy");
 		}
 
 		registry.DestroyEntity(source);

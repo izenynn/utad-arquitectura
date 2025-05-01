@@ -23,6 +23,7 @@ target_sources( main PRIVATE
         "systems/input_system.h"
         "systems/render_text_system.h"
         "systems/player_control_system.h"
+        "systems/player_death_system.h"
         "systems/enemy_control_system.h"
         "systems/enemy_spawn_system.h"
         "systems/score_system.h"

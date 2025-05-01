@@ -19,6 +19,7 @@
 #include "../systems/render_text_system.h"
 #include "../systems/input_system.h"
 #include "../systems/player_control_system.h"
+#include "../systems/player_death_system.h"
 #include "../systems/enemy_control_system.h"
 #include "../systems/enemy_spawn_system.h"
 #include "../systems/score_system.h"
@@ -66,6 +67,7 @@ void Engine::Setup()
 	registry_->AddSystem<RenderTextSystem>();
 	registry_->AddSystem<InputSystem>();
 	registry_->AddSystem<PlayerControlSystem>();
+	registry_->AddSystem<PlayerDeathSystem>();
 	registry_->AddSystem<EnemyControlSystem>();
 	registry_->AddSystem<EnemySpawnSystem>();
 	registry_->AddSystem<ScoreSystem>();
@@ -127,6 +129,10 @@ void Engine::Update(float delta_time)
 
 	registry_->GetSystem<InputSystem>().Update(window_);
 	registry_->GetSystem<PlayerControlSystem>().Update(delta_time);
+	registry_->GetSystem<PlayerDeathSystem>().Update(*asset_store_, [this]() {
+		Logger::Error("Player has died");
+		// is_running_ = false;
+	});
 	registry_->GetSystem<EnemyControlSystem>().Update(delta_time, *registry_, *asset_store_, kWindowWidth, kWindowHeight);
 	registry_->GetSystem<EnemySpawnSystem>().Update(delta_time, *registry_);
 
