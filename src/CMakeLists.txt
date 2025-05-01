@@ -16,7 +16,7 @@ target_sources( main PRIVATE
         "components/text_component.h"
         "components/tag_component.h"
         "components/enemy_component.h"
-        "components/score_component.h"
+        "components/game_score_component.h"
 
         "systems/movement_system.h"
         "systems/render_sprite_system.h"
@@ -26,8 +26,9 @@ target_sources( main PRIVATE
         "systems/player_death_system.h"
         "systems/enemy_control_system.h"
         "systems/enemy_spawn_system.h"
-        "systems/game_score_system.h"
         "systems/game_state_system.h"
         "systems/game_start_system.h"
         "systems/game_reset_system.h"
+        "systems/game_score_system.h"
+        "systems/game_high_score_system.h"
 )

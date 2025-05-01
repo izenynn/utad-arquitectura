@@ -12,8 +12,9 @@
 #include "../components/text_component.h"
 #include "../components/input_component.h"
 #include "../components/enemy_component.h"
-#include "../components/score_component.h"
 #include "../components/game_state_component.h"
+#include "../components/game_score_component.h"
+#include "../components/game_high_score_component.h"
 
 #include "../systems/movement_system.h"
 #include "../systems/render_sprite_system.h"
@@ -23,10 +24,11 @@
 #include "../systems/player_death_system.h"
 #include "../systems/enemy_control_system.h"
 #include "../systems/enemy_spawn_system.h"
-#include "../systems/game_score_system.h"
 #include "../systems/game_state_system.h"
 #include "../systems/game_start_system.h"
 #include "../systems/game_reset_system.h"
+#include "../systems/game_score_system.h"
+#include "../systems/game_high_score_system.h"
 
 Engine::Engine()
 {
@@ -74,10 +76,11 @@ void Engine::Setup()
 	registry_->AddSystem<PlayerDeathSystem>();
 	registry_->AddSystem<EnemyControlSystem>();
 	registry_->AddSystem<EnemySpawnSystem>();
-	registry_->AddSystem<GameScoreSystem>();
 	registry_->AddSystem<GameStateSystem>();
 	registry_->AddSystem<GameStartSystem>();
 	registry_->AddSystem<GameResetSystem>();
+	registry_->AddSystem<GameScoreSystem>();
+	registry_->AddSystem<GameHighScoreSystem>();
 
 	// Add entities
 	Entity gm = registry_->CreateEntity();
@@ -90,6 +93,24 @@ void Engine::Setup()
 	bg.GetComponent<TransformComponent>().position = glm::vec2(0.0f, 8.0f);
 	bg.GetComponent<TransformComponent>().pivot = glm::vec2(0.0f, 0.0f);
 	bg.AddComponent<SpriteComponent>("background", 0);
+
+	// Create UI
+	Entity time_text = registry_->CreateEntity();
+	time_text.AddComponent<TagComponent>("ui_game");
+	time_text.AddComponent<TransformComponent>(glm::vec2(100.0f, 202.0f));
+	time_text.AddComponent<TextComponent>("TIME", glm::vec4(0.9f, 0.9f, 0.0f, 1.0f));
+
+	Entity score = registry_->CreateEntity();
+	score.AddComponent<TagComponent>("ui_game");
+	score.AddComponent<TransformComponent>(glm::vec2(135.0f, 202.0f));
+	score.AddComponent<TextComponent>("000", glm::vec4(0.9f, 0.5f, 0.1f, 1.0f));
+	score.AddComponent<GameScoreComponent>();
+
+	Entity hi = registry_->CreateEntity();
+	hi.AddComponent<TagComponent>("ui_game");
+	hi.AddComponent<TransformComponent>(glm::vec2(110.0f, 212.0f));
+	hi.AddComponent<TextComponent>("HI 000", glm::vec4(0.9f, 0.5f, 0.1f, 1.0f));
+	hi.AddComponent<GameHighScoreComponent>();
 }
 
 void Engine::Run()
@@ -130,6 +151,7 @@ void Engine::Update(float delta_time)
 	registry_->GetSystem<EnemySpawnSystem>().Update(delta_time, *registry_);
 
 	registry_->GetSystem<GameScoreSystem>().Update(delta_time);
+	registry_->GetSystem<GameHighScoreSystem>().Update();
 	registry_->GetSystem<GameStateSystem>().Update(*registry_);
 
 	registry_->GetSystem<MovementSystem>().Update(delta_time);

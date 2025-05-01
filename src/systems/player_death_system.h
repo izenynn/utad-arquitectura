@@ -88,15 +88,11 @@ public:
 
 			const float dist_sq = glm::dot(circle_center - closest_point, circle_center - closest_point);
 			if (dist_sq <= radius * radius) {
+				// Reset game state
 				if (registry.HasSystem<GameResetSystem>())
 					registry.GetSystem<GameResetSystem>().Run(registry);
 				else
 					Logger::Error("Player Death System: Game Reset System not found");
-
-				if (registry.HasSystem<EnemySpawnSystem>())
-					registry.GetSystem<EnemySpawnSystem>().Stop();
-				else
-					Logger::Error("Player Death System: Enemy Spawn System not found");
 
 				return;
 			}

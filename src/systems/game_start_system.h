@@ -9,9 +9,11 @@
 #include "../components/tag_component.h"
 #include "../components/sprite_component.h"
 #include "../components/text_component.h"
-#include "../components/score_component.h"
+#include "../components/game_score_component.h"
 
 #include "../systems/enemy_spawn_system.h"
+#include "../systems/game_score_system.h"
+#include "../systems/game_high_score_system.h"
 
 /*
  * GameStartSystem initializes the game when space is pressed.
@@ -42,21 +44,15 @@ public:
 		player.AddComponent<SpriteComponent>("player", 10);
 		player.AddComponent<InputComponent>();
 
-		// Create UI
-		Entity time_text = registry.CreateEntity();
-		time_text.AddComponent<TagComponent>("ui_game");
-		time_text.AddComponent<TransformComponent>(glm::vec2(100.0f, 208.0f));
-		time_text.AddComponent<TextComponent>("TIME", glm::vec4(0.9f, 0.9f, 0.0f, 1.0f));
-
-		Entity time_score = registry.CreateEntity();
-		time_score.AddComponent<TagComponent>("ui_game");
-		time_score.AddComponent<TransformComponent>(glm::vec2(135.0f, 208.0f));
-		time_score.AddComponent<TextComponent>("000", glm::vec4(0.9f, 0.5f, 0.1f, 1.0f));
-		time_score.AddComponent<ScoreComponent>(0.0f);
-
 		// Reset enemy spawn system
 		if (registry.HasSystem<EnemySpawnSystem>())
 			registry.GetSystem<EnemySpawnSystem>().Reset();
+
+		// Reset score
+		if (registry.HasSystem<GameScoreSystem>())
+			registry.GetSystem<GameScoreSystem>().Reset();
+		else
+			Logger::Error("Game Start System: GameScoreSystem not found");
 	}
 };
 

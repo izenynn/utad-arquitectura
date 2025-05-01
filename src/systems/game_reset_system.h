@@ -3,6 +3,9 @@
 
 #include "../ecs/ecs.h"
 #include "../components/tag_component.h"
+#include "../systems/enemy_spawn_system.h"
+#include "../systems/game_score_system.h"
+#include "../systems/game_high_score_system.h"
 
 /*
  * GameRestartSystem handles the game restart process.
@@ -24,7 +27,7 @@ public:
 			auto& tag = entity.GetComponent<TagComponent>();
 
 			// Remove player, enemies, and UI elements
-			if (tag.tag == "player" || tag.tag == "enemy" || tag.tag == "ui_game")
+			if (tag.tag == "player" || tag.tag == "enemy")
 				registry.DestroyEntity(entity);
 
 			// Find game_manager entity
@@ -49,6 +52,34 @@ public:
 		start_text.AddComponent<TransformComponent>(glm::vec2(50.0f, 100.0f));
 		start_text.AddComponent<TagComponent>("ui_menu");
 		start_text.AddComponent<TextComponent>("Press [SPACE] to start...", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		// Stop enemy spawn system
+		if (registry.HasSystem<EnemySpawnSystem>())
+			registry.GetSystem<EnemySpawnSystem>().Stop();
+		else
+			Logger::Error("Player Death System: Enemy Spawn System not found");
+
+		// Stop score system
+		if (registry.HasSystem<GameScoreSystem>())
+			registry.GetSystem<GameScoreSystem>().Stop();
+		else
+			Logger::Error("Player Death System: Game Score System not found");
+
+		// Save high score
+		if (registry.HasSystem<GameScoreSystem>()) {
+			if (registry.HasSystem<GameHighScoreSystem>())
+				registry.GetSystem<GameHighScoreSystem>().SetHighScoreIfGreater(registry.GetSystem<GameScoreSystem>().GetScore());
+			else
+				Logger::Error("Game Reset System: GameHighScoreSystem not found");
+		} else {
+			Logger::Error("Game Reset System: GameScoreSystem not found");
+		}
+
+		// Load high score
+		if (registry.HasSystem<GameHighScoreSystem>())
+			registry.GetSystem<GameHighScoreSystem>().LoadHighScore();
+		else
+			Logger::Error("Game Start System: GameHighScoreSystem not found");
 	}
 };
 
